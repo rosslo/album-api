@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Pixnet相簿API-羅弘智</title>
+	<style type="text/css">
+		body{
+			text-align: center;
+			font-family: "Microsoft JhengHei";
+		}
+		#container{
+			width: 80%;
+			margin: 0 auto;
+			text-align: left;
+		}
+		#album-list img{
+			display: block;
+			width: 160px;;
+			height: auto;
+			padding: 5px;
+			margin: 5px;
+			border: 1px solid #aaa;
+			position: relative;
+			top: 0px;
+			left: 0px;
+			cursor: pointer;
+			transition: all 0.2s;
+			-moz-transition: all 0.2s;
+			-webkit-transition: all 0.2s;
+			-o-transition: all 0.2s;
+		}
+		#album-list img:hover{
+			box-shadow:4px 4px 0px 1px #eee,4px 4px 0px 2px #bbb,8px 8px 0px 1px #ddd,8px 8px 0px 2px #aaa;
+			position: relative;
+			top: -5px;
+			left: -5px;
+		}
+		#text-box{
+			width: 160px;
+			text-align: center;
+		}
+		#album-list a{
+			cursor: pointer;
+			color: #000;
+			text-decoration: none;
+		}
+		#album-list a:hover{
+			color: rgb(29,74,158);
+		}
+		.image-box{
+			position: relative;
+			display: inline-block;
+			z-index: 1;
+		}
+		.image-img{
+			position: relative;
+			cursor: pointer;
+			z-index: 3;
+		}
+		.image-text{
+			color: #fff;
+			font-size: 10px;
+			padding: 5px;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-color: rgba(0,0,0,0.9);
+			transform: scale(1);
+			transition: transform 0.8s;
+			z-index: 2;
+			box-sizing:border-box;
+		}
+		#image-list img{
+			margin-bottom: -4px;
+			animation:fade-in 1s;
+			-webkit-animation:fade-in 1s;
+		}
+		@keyframes fade-in{
+			from{opacity: 0}to{opacity: 1}
+		}
+		#page-title, #album-btn{
+			display: inline-block;
+		}
+		#album-btn{
+			border: 1px solid #bbb;
+			border-radius: 10px;
+			margin-left: 40px;
+			padding: 5px 10px;
+			background-color: #fff;
+			display: none;
+			cursor: pointer;
+			transition: background-color 0.2s;
+		}
+		#album-btn:hover{
+			background-color: #bbb;
+		}
+		@media screen and (max-width: 400px) {
+		    #album-btn {
+		       margin-left: 0px;
+		    }
+		}
+	</style>
+</head>
+<body onresize="setImageSize()">
+	<h1>Pixnet相簿API-羅弘智</h1>
+	<div id="container">
+	<h2 id="page-title">相簿列表</h2>
+	<h3 id="album-btn" onclick="closeAlbum()">回到相簿列表</h3>
+		<div id="album-list">
+		</div>
+		<div id="image-list">
+			<div id="imageInfo"></div>
+		</div>
+	</div>
+<script type="text/javascript">
+var imgArray=[];
+loadData();
+function loadData() {
+    var request = new XMLHttpRequest();
+    request.open("GET", "http://emma.pixnet.cc/album/elements?set_id=5681828&user=tysh310246&callback");
+    request.send();
+    request.onreadystatechange = function() {
+        if (request.readyState == 4 ) {
+            if (request.status == 200) {
+           		var type = request.getResponseHeader("Content-Type");
+           		if (type.indexOf("application/json") === 0) {
+                   	var data = JSON.parse(request.responseText);
+	                if (data.total>0) {
+	                	imgArray = data.elements;
+	                }
+	                if(data.set.category){
+	                	var img = document.createElement("IMG");
+	                	img.src=data.set.thumb;
+	                	img.id="album-thumb";
+	                	img.onclick = function(){openAlbum();};
+	                	document.getElementById("album-list").appendChild(img);
+	                	var name = document.createElement("A");
+	                	name.id = "album-text";
+	                	name.onclick = function(){openAlbum();};
+	                	name.innerText = data.set.category+" - "+data.total+"張照片";
+	                	var textBox = document.createElement("div");
+	                	textBox.id = "text-box";
+	                	document.getElementById("album-list").appendChild(textBox);
+	                	document.getElementById("text-box").appendChild(name);
+	                	createAlbum(data.elements);
+	                	closeAlbum();
+	                }
+	            }else {
+	                alert("發生錯誤: " + request.status);
+	            }
+           }
+           else if (request.status == 400) {
+              alert('There was an error 400');
+           }
+           else {
+               alert('something else other than 200 was returned');
+           }
+        }
+    };
+}
+function createAlbum(data){
+	if(!data){
+		document.getElementById("image-list").innerHTML="<h3>沒有照片</h3>";
+	}else{
+		for(var i=0;i<data.length;i++){
+			var imgBox = document.createElement("DIV");
+			var imgText = document.createElement("DIV");
+			var img = document.createElement("IMG");
+			imgBox.className="image-box";
+			imgText.className="image-text";
+			imgBox.appendChild(img);
+			imgBox.appendChild(imgText);
+			img.src=data[i].thumb;
+			img.className="image-img";
+			(function(index){
+				img.onmouseover = function(){showImageInfo(index);};
+				img.onmouseout = function(){hideImageInfo(index);};
+			})(i)
+			document.getElementById("image-list").appendChild(imgBox);
+		}
+	}
+	setImageSize();
+}
+function openAlbum(){
+	document.getElementById("image-list").style.display="block";
+	document.getElementById("album-list").style.display="none";
+	document.getElementById("page-title").innerText="照片列表";
+	document.getElementById("album-btn").style.display="inline-block";
+}
+function closeAlbum(){
+	document.getElementById("image-list").style.display="none";
+	document.getElementById("album-list").style.display="block";
+	document.getElementById("page-title").innerText="相簿列表";
+	document.getElementById("album-btn").style.display="none";
+}
+function setImageSize(){
+	var boxWidth = document.getElementById("container").offsetWidth-1;
+	var count = Math.floor(boxWidth / 120);
+	var imgWidth = boxWidth/count;
+	var images = document.getElementsByClassName("image-img");
+	var texts = document.getElementsByClassName("image-text");
+	var length = images.length;
+	for(i=0;i<length;i++){
+		images[i].style.width=imgWidth.toString()+"px";
+		images[i].style.height=imgWidth.toString()+"px";
+		texts[i].style.width=imgWidth.toString()+"px";
+		texts[i].style.height=imgWidth.toString()+"px";
+	}
+	setTransformOrigin(count,length);
+}
+function setTransformOrigin(count,length){
+	var half =  Math.floor(count/2);
+	var checkLast =  Math.floor(count/2); //用餘數確認是否是一列中的最後一個
+	var checkHalf = Math.floor((count/2)-1); //用餘數確認是否是位於一列的中間
+	var row = Math.floor(24/count);
+	var turn = true;  //改變方向 true = to right、 false = to left
+	for(var index=0;index<length;index++){
+		if(turn){
+			document.getElementsByClassName("image-text")[index].style.transformOrigin="0% 0%"; //to right-bottom
+			document.getElementsByClassName("image-box")[index].style.textAlign="right";
+			if(Math.ceil((index+1)/count)>=row){
+				document.getElementsByClassName("image-text")[index].style.transformOrigin="0% 100%";	//to right-top
+				document.getElementsByClassName("image-box")[index].style.textAlign="left";
+			}
+		}else{
+			document.getElementsByClassName("image-text")[index].style.transformOrigin="100% 0%"; //to left-bottom
+			if(Math.ceil((index+1)/count)>=row){
+				document.getElementsByClassName("image-text")[index].style.transformOrigin="100% 100%"; //to left-top
+			}
+			document.getElementsByClassName("image-box")[index].style.textAlign="left";
+		}
+		if(index%half===checkHalf){
+			turn=!turn;
+		}
+	}
+}
+function showImageInfo(index){
+	document.getElementsByClassName("image-text")[index].style.transform="scale(2)";
+	document.getElementsByClassName("image-box")[index].style.zIndex=2;
+	document.getElementsByClassName("image-text")[index].innerHTML = "第"+index+"張照片<br/>照片說明...";
+}
+function hideImageInfo(index){
+	document.getElementsByClassName("image-text")[index].style.transform="scale(1)";
+	document.getElementsByClassName("image-box")[index].style.zIndex=1;
+}
+</script>
+</body>
+</html>
