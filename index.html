@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Pixnet相簿API-羅弘智</title>
 	<style type="text/css">
 		body{
@@ -173,6 +174,8 @@ function createAlbum(data){
 			img.src=data[i].thumb;
 			img.className="image-img";
 			(function(index){
+				img.ontouchstart = function(){showImageInfo(index);};
+				img.ontouchend = function(){hideImageInfo(index);};
 				img.onmouseover = function(){showImageInfo(index);};
 				img.onmouseout = function(){hideImageInfo(index);};
 			})(i)
