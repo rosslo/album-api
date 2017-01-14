@@ -174,7 +174,7 @@ function createAlbum(data){
 			img.src=data[i].thumb;
 			img.className="image-img";
 			(function(index){
-				img.ontouchstart = function(){mobileShowImageInfo(index);};
+				img.addEvetListener("touchstart",mobileShowImageInfo(index).false);
 				img.onmouseover = function(){showImageInfo(index);};
 				img.onmouseout = function(){hideImageInfo(index);};
 			})(i)
@@ -197,7 +197,7 @@ function closeAlbum(){
 }
 function setImageSize(){
 	var boxWidth = document.getElementById("container").offsetWidth-1;
-	var count = Math.floor(boxWidth / 120);
+	var count = Math.floor(boxWidth / 120); //每一列幾張圖片
 	var imgWidth = boxWidth/count;
 	var images = document.getElementsByClassName("image-img");
 	var texts = document.getElementsByClassName("image-text");
@@ -211,9 +211,9 @@ function setImageSize(){
 	setTransformOrigin(count,length);
 }
 function setTransformOrigin(count,length){
-	var half =  Math.floor(count/2);
+	var halfIndex = (count%2!==0)?count:Math.floor(count/2);//(偶基數不同)
 	var checkLast =  Math.floor(count/2); //用餘數確認是否是一列中的最後一個
-	var checkHalf = Math.floor((count/2)-1); //用餘數確認是否是位於一列的中間
+	var checkHalf = (count%2!==0)?Math.floor((count/2)):Math.floor((count/2)-1); //用餘數確認是否是位於一列的中間(偶基數不同)
 	var row = Math.floor(24/count);
 	var turn = true;  //改變方向 true = to right、 false = to left
 	for(var index=0;index<length;index++){
@@ -231,7 +231,7 @@ function setTransformOrigin(count,length){
 			}
 			document.getElementsByClassName("image-box")[index].style.textAlign="left";
 		}
-		if(index%half===checkHalf){
+		if(index%count===checkHalf || index%count===(count-1)){
 			turn=!turn;
 		}
 	}
