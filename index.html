@@ -174,8 +174,7 @@ function createAlbum(data){
 			img.src=data[i].thumb;
 			img.className="image-img";
 			(function(index){
-				img.ontouchstart = function(){showImageInfo(index);};
-				img.ontouchend = function(){hideImageInfo(index);};
+				img.ontouchstart = function(){mobileShowImageInfo(index);};
 				img.onmouseover = function(){showImageInfo(index);};
 				img.onmouseout = function(){hideImageInfo(index);};
 			})(i)
@@ -236,6 +235,18 @@ function setTransformOrigin(count,length){
 			turn=!turn;
 		}
 	}
+}
+function mobileShowImageInfo(index){
+	[].forEach.call(document.getElementsByClassName("image-box"),mobileClearImageInfo);
+	document.getElementsByClassName("image-text").style.transform="scale(1)";
+	document.getElementsByClassName("image-box").style.zIndex=1;
+	document.getElementsByClassName("image-text")[index].style.transform="scale(2)";
+	document.getElementsByClassName("image-box")[index].style.zIndex=2;
+	document.getElementsByClassName("image-text")[index].innerHTML = "第"+index+"張照片<br/>照片說明...";
+}
+function mobileClearImageInfo(item, index){
+	document.getElementsByClassName("image-text")[index].style.transform="scale(1)";
+	document.getElementsByClassName("image-box")[index].style.zIndex=1;
 }
 function showImageInfo(index){
 	document.getElementsByClassName("image-text")[index].style.transform="scale(2)";
