@@ -114,7 +114,7 @@
 <body onresize="setImageSize()">
 	<h1>Pixnet相簿API-羅弘智</h1>
 	<div id="container">
-	<h2 id="page-title" onclick="mobileShowImageInfo(1)" ontouchstart="mobileShowImageInfo(1)">相簿列表</h2>
+	<h2 id="page-title">相簿列表</h2>
 	<h3 id="album-btn" onclick="closeAlbum()">回到相簿列表</h3>
 		<div id="album-list">
 		</div>
@@ -185,8 +185,9 @@ function createAlbum(data){
 			document.getElementById("image-list").appendChild(imgBox);
 			function bindEvent(index){
 				document.getElementsByClassName('image-img')[index].ontouchstart = function(){showImageInfo(index);};
-				//document.getElementsByClassName('image-text')[index].onmouseover = function(){showImageInfo(index);};
-				//document.getElementsByClassName('image-img')[index].onmouseout = function(){hideImageInfo(index);};
+				document.getElementsByClassName('image-img')[index].ontouchend = function(){hideImageInfo(index);};
+				document.getElementsByClassName('image-text')[index].onmouseover = function(){showImageInfo(index);};
+				document.getElementsByClassName('image-img')[index].onmouseout = function(){hideImageInfo(index);};
 			}
 			bindEvent(i);
 		}
@@ -251,7 +252,6 @@ function setTransformOrigin(count,length){
 	}
 }
 function mobileShowImageInfo(index){
-	alert('123');
 	[].forEach.call(document.getElementsByClassName("image-box"),mobileClearImageInfo);
 	document.getElementsByClassName("image-text")[index].style.transform="scale(2)";
 	document.getElementsByClassName("image-text")[index].style.webkitTransform="scale(2)";
@@ -264,7 +264,6 @@ function mobileClearImageInfo(item, index){
 	document.getElementsByClassName("image-box")[index].style.zIndex=1;
 }
 function showImageInfo(index){
-	alert('456');
 	document.getElementsByClassName("image-text")[index].style.transform="scale(2)";
 	document.getElementsByClassName("image-text")[index].style.webkitTransform="scale(2)";
 	document.getElementsByClassName("image-box")[index].style.zIndex=2;
