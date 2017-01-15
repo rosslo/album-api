@@ -67,9 +67,15 @@
 			left: 0;
 			background-color: rgba(0,0,0,0.9);
 			transform: scale(1);
-			transition: transform 0.8s;
+			-ms-transform: scale(1);
+    		-webkit-transform: scale(1);
+    		transition: transform 0.8s;
+			-moz-transition: -ms-transform 2s;
+			-webkit-transition: -webkit-transform 2s;
 			z-index: 2;
 			box-sizing:border-box;
+			-moz-box-sizing:border-box;
+			-webkit-box-sizing:border-box;
 		}
 		#image-list img{
 			margin-bottom: -4px;
@@ -77,6 +83,9 @@
 			-webkit-animation:fade-in 1s;
 		}
 		@keyframes fade-in{
+			from{opacity: 0}to{opacity: 1}
+		}
+		@-webkit-keyframes fade-in{
 			from{opacity: 0}to{opacity: 1}
 		}
 		#page-title, #album-btn{
@@ -220,15 +229,19 @@ function setTransformOrigin(count,length){
 	for(var index=0;index<length;index++){
 		if(turn){
 			document.getElementsByClassName("image-text")[index].style.transformOrigin="0% 0%"; //to right-bottom
+			document.getElementsByClassName("image-text")[index].style.webkitTransformOrigin="0% 0%"; //to right-bottom
 			document.getElementsByClassName("image-box")[index].style.textAlign="right";
 			if(Math.ceil((index+1)/count)>=row){
 				document.getElementsByClassName("image-text")[index].style.transformOrigin="0% 100%";	//to right-top
+				document.getElementsByClassName("image-text")[index].style.webkitTransformOrigin="0% 100%";
 				document.getElementsByClassName("image-box")[index].style.textAlign="left";
 			}
 		}else{
 			document.getElementsByClassName("image-text")[index].style.transformOrigin="100% 0%"; //to left-bottom
+			document.getElementsByClassName("image-text")[index].style.webkitTransformOrigin="100% 0%"; //to left-bottom
 			if(Math.ceil((index+1)/count)>=row){
 				document.getElementsByClassName("image-text")[index].style.transformOrigin="100% 100%"; //to left-top
+				document.getElementsByClassName("image-text")[index].style.webkitTransformOrigin="100% 100%"; //to left-top
 			}
 			document.getElementsByClassName("image-box")[index].style.textAlign="left";
 		}
