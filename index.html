@@ -70,8 +70,8 @@
 			-ms-transform: scale(1);
     		-webkit-transform: scale(1);
     		transition: transform 0.8s;
-			-moz-transition: -ms-transform 2s;
-			-webkit-transition: -webkit-transform 2s;
+			-moz-transition: -ms-transform 0.8s;
+			-webkit-transition: -webkit-transform 0.8s;
 			z-index: 2;
 			box-sizing:border-box;
 			-moz-box-sizing:border-box;
@@ -251,6 +251,7 @@ function setTransformOrigin(count,length){
 	}
 }
 function mobileShowImageInfo(index){
+	alert('123');
 	[].forEach.call(document.getElementsByClassName("image-box"),mobileClearImageInfo);
 	document.getElementsByClassName("image-text")[index].style.transform="scale(2)";
 	document.getElementsByClassName("image-box")[index].style.zIndex=2;
@@ -261,6 +262,7 @@ function mobileClearImageInfo(item, index){
 	document.getElementsByClassName("image-box")[index].style.zIndex=1;
 }
 function showImageInfo(index){
+	alert('456');
 	document.getElementsByClassName("image-text")[index].style.transform="scale(2)";
 	document.getElementsByClassName("image-box")[index].style.zIndex=2;
 	document.getElementsByClassName("image-text")[index].innerHTML = "第"+index+"張照片<br/>照片說明...";
