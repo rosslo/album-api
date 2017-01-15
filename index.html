@@ -184,7 +184,7 @@ function createAlbum(data){
 			img.className="image-img";
 			document.getElementById("image-list").appendChild(imgBox);
 			function bindEvent(index){
-				document.getElementsByClassName('image-img')[index].onclick = function(){showImageInfo(index);};
+				document.getElementsByClassName('image-img')[index].ontouchstart = function(){showImageInfo(index);};
 				//document.getElementsByClassName('image-text')[index].onmouseover = function(){showImageInfo(index);};
 				//document.getElementsByClassName('image-img')[index].onmouseout = function(){hideImageInfo(index);};
 			}
@@ -254,16 +254,19 @@ function mobileShowImageInfo(index){
 	alert('123');
 	[].forEach.call(document.getElementsByClassName("image-box"),mobileClearImageInfo);
 	document.getElementsByClassName("image-text")[index].style.transform="scale(2)";
+	document.getElementsByClassName("image-text")[index].style.webkitTransform="scale(2)";
 	document.getElementsByClassName("image-box")[index].style.zIndex=2;
 	document.getElementsByClassName("image-text")[index].innerHTML = "第"+index+"張照片<br/>照片說明...";
 }
 function mobileClearImageInfo(item, index){
 	document.getElementsByClassName("image-text")[index].style.transform="scale(1)";
+	document.getElementsByClassName("image-text")[index].style.webkitTransform="scale(1)";
 	document.getElementsByClassName("image-box")[index].style.zIndex=1;
 }
 function showImageInfo(index){
 	alert('456');
 	document.getElementsByClassName("image-text")[index].style.transform="scale(2)";
+	document.getElementsByClassName("image-text")[index].style.webkitTransform="scale(2)";
 	document.getElementsByClassName("image-box")[index].style.zIndex=2;
 	document.getElementsByClassName("image-text")[index].innerHTML = "第"+index+"張照片<br/>照片說明...";
 }
