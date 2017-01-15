@@ -105,7 +105,7 @@
 <body onresize="setImageSize()">
 	<h1>Pixnet相簿API-羅弘智</h1>
 	<div id="container">
-	<h2 id="page-title" ontouchstart="alertEvent()" ontouchend="hideImageInfo(1)">相簿列表</h2>
+	<h2 id="page-title">相簿列表</h2>
 	<h3 id="album-btn" onclick="closeAlbum()">回到相簿列表</h3>
 		<div id="album-list">
 		</div>
@@ -175,8 +175,7 @@ function createAlbum(data){
 			img.className="image-img";
 			document.getElementById("image-list").appendChild(imgBox);
 			function bindEvent(index){
-				document.getElementsByClassName('image-img')[index].ontouchstart = function(){showImageInfo(index);};
-				document.getElementsByClassName('image-box')[index].ontouchstart = function(){showImageInfo(index);};
+				document.getElementsByClassName('image-img')[index].onclick = function(){mobileShowImageInfo(index);};
 				document.getElementsByClassName('image-img')[index].onmouseover = function(){showImageInfo(index);};
 				document.getElementsByClassName('image-img')[index].onmouseout = function(){hideImageInfo(index);};
 			}
@@ -256,9 +255,6 @@ function showImageInfo(index){
 function hideImageInfo(index){
 	document.getElementsByClassName("image-text")[index].style.transform="scale(1)";
 	document.getElementsByClassName("image-box")[index].style.zIndex=1;
-}
-function alertEvent(){
-	alert('123');
 }
 </script>
 </body>
