@@ -176,8 +176,8 @@ function createAlbum(data){
 			document.getElementById("image-list").appendChild(imgBox);
 			function bindEvent(index){
 				document.getElementsByClassName('image-img')[index].onclick = function(){mobileShowImageInfo(index);};
-				document.getElementsByClassName('image-img')[index].onmouseover = function(){showImageInfo(index);};
-				document.getElementsByClassName('image-img')[index].onmouseout = function(){hideImageInfo(index);};
+				//document.getElementsByClassName('image-img')[index].onmouseover = function(){showImageInfo(index);};
+				//document.getElementsByClassName('image-img')[index].onmouseout = function(){hideImageInfo(index);};
 			}
 			bindEvent(i);
 		}
